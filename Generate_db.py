@@ -100,21 +100,17 @@ att_list = ['id','above-the-hip (length)',
 ids = []
 with open('db_csv/img_id.csv', newline='') as csvfile:
 	data = csv.reader(csvfile, delimiter=',')
-	for row in data:
-		ids.append(row[0])
-
+	ids.extend(row[0] for row in data)
 atts = []
 with open('db_csv/attributes.csv', newline='') as csvfile:
 	data = csv.reader(csvfile, delimiter=',')
-	for row in data:
-		atts.append(row)
-		# print(', '.join(row))
+	atts.extend(iter(data))
 # print(atts)
 
 no_of_ids = len(ids)
 
 for i in range(no_of_ids):
-	id = ids[i][0:8] + " " + ".jpg"
+	id = f"{ids[i][:8]} .jpg"
 	print(id)
 	atts[i].insert(0, ids[i])
 
@@ -189,9 +185,7 @@ color_list = ['aqua', 'black', 'blue', 'fuchsia', 'green', 'gray', 'lime', 'maro
 colors = []
 with open('db_csv/colors.csv', newline='') as csvfile:
 	data = csv.reader(csvfile, delimiter=',')
-	for row in data:
-		colors.append(row)
-
+	colors.extend(iter(data))
 no_of_ids = len(ids)
 
 print(len(colors), len(ids))

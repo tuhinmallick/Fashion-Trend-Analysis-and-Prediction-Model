@@ -49,9 +49,9 @@ profiles = []
 datetimelist = []
 SCROLL_PAUSE_TIME = 1.6
 #Get scroll height
- 
+
 last_height = bot.browser.execute_script("return document.body.scrollHeight")
-for i in range (5):
+for _ in range (5):
     name1 = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME , "sqdOP.yWX7d._8A5w5.ZIAjV"))) ## geting proflie names
     date1 = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME , "_1o9PC.Nzb55")))             ## geting dates of posts  
     for n in name1:
@@ -61,8 +61,7 @@ for i in range (5):
     for d in date1:
         date = d.get_attribute("datetime")
         datetimelist.append(date)
-    
-      # Scroll down to bottom
+
     bot.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     # Wait to load page
@@ -73,9 +72,8 @@ for i in range (5):
     if new_height == last_height:
         break
     last_height = new_height
-    
- 
- # making csv
+
+
 new_profile = []
 for profile in profiles:
     profile = profile.replace("See All","")
@@ -90,7 +88,7 @@ new_date = []
 for date in datetimelist:
     date = date.replace("T"," ")[:-5]
     utc = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
-    
+
     from_zone = tz.gettz('UTC')
     to_zone = tz.gettz('Asia/Kolkata')
     utc = utc.replace(tzinfo=from_zone)
@@ -105,5 +103,5 @@ df = pd.DataFrame(list(zip(new_date)),
 df.to_csv('datetime.csv')
 
 with open('profile.txt', 'w') as filehandle:
-    for profile in new_profile :
-        filehandle.write('%s,'% profile)
+    for profile in new_profile:
+        filehandle.write(f'{profile},')

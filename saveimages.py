@@ -24,9 +24,7 @@ def format_date(ip):
 	for i in range(3):
 		op2 = op2 + temp[i] + t[i]
 
-	op = op1 + " " + op2
-	# print(op)
-	return op
+	return op1 + " " + op2
 
 
 def load_images(formated_dates, profiles):
@@ -53,20 +51,16 @@ datetime = pd.read_csv("C:/Users/91976/Desktop/instagram-scraper-master/datetime
 dates = datetime[',datetimelist'].tolist()
 
 
-#Get image ids
-formated_dates = []
-for date in dates:
-	formated_dates.append(format_date(date) + ".jpg")
-
+formated_dates = [format_date(date) + ".jpg" for date in dates]
 #Get paths 
 images = load_images(formated_dates, profiles)
 
+destination = r"C:/Users/91976/Desktop/dataset/"
+
 #Search directory
 for image in images:
-    print(image)
-    destination = r"C:/Users/91976/Desktop/dataset/"
-    
-    shutil.copy(image, destination)  
+	print(image)
+	shutil.copy(image, destination)  
 	
 
 

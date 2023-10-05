@@ -30,34 +30,40 @@ def trends():
         att_id = []
         filter_att = request.form.getlist('typeof')
         for query in filter_att:
-            for row in conn.execute(f"SELECT id FROM attributes WHERE {query} = 1"):
-                att_id.append(row[0])
-
+            att_id.extend(
+                row[0]
+                for row in conn.execute(
+                    f"SELECT id FROM attributes WHERE {query} = 1"
+                )
+            )
         color_id = []
         filter_color = request.form.getlist('colourval')
         print(filter_color)
         for query in filter_color:
             # print(f"SELECT id FROM colors WHERE {query} = 1")
-            for row in conn.execute(f"SELECT id FROM colors WHERE {query} = 1"):
-                color_id.append(row[0])
-
+            color_id.extend(
+                row[0]
+                for row in conn.execute(
+                    f"SELECT id FROM colors WHERE {query} = 1"
+                )
+            )
         lst3 = []
-        if len(color_id) == 0:
+        if not color_id:
             lst3 = att_id
 
-        elif len(att_id) == 0:
+        elif not att_id:
             lst3 = color_id
-        
+
         else:
             # print(len(att_id), len(color_id))
             lst3 = [value for value in att_id if value in color_id]
             # print(len(lst3))
 
-        images = lst3  
+        images = lst3
         print(images)
-  
+
         conn.close()
-    
+
     print(images)
     #Remove duplicates
     images = list(set(images))[:12]
@@ -73,7 +79,12 @@ def trial():
     conn = sqlite3.connect('myntra.db')
     c = conn.cursor()
 
-    image_list = [row[0] + ".jpg" for row in c.execute("SELECT id, midi FROM attributes WHERE mini_length = 1 AND id <= 4")][:12]
+    image_list = [
+        f"{row[0]}.jpg"
+        for row in c.execute(
+            "SELECT id, midi FROM attributes WHERE mini_length = 1 AND id <= 4"
+        )
+    ][:12]
     print(image_list)
     return render_template("trial.html",image_list = image_list)
 
